@@ -21,7 +21,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
 
-    implementation(project(":lib:libcodablejson-derivative"))
+    implementation(project(":lib:libcodablejson"))
     implementation("com.google.code.gson:gson:2.12.1")
 }
 
