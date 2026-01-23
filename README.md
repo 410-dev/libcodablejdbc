@@ -91,47 +91,6 @@ public class MyTableService implements MySQLTableServiceTemplate {
 #### Production Implementation (HikariCP)
 For production environments, it is **highly recommended** to use a connection pool like [HikariCP](https://github.com/brettwooldridge/HikariCP) to manage database connections efficiently.
 
-**1. Add dependency to `build.gradle.kts`:**
-```kotlin
-implementation("com.zaxxer:HikariCP:5.1.0")
-```
-
-**2. Implement the service using `HikariDataSource`:**
-
-```java
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import me.hysong.libcodablejdbc.utils.dbtemplates.MySQLTableServiceTemplate;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-public class ProductionTableService implements MySQLTableServiceTemplate {
-
-    private static final HikariDataSource dataSource;
-
-    static {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mariadb://localhost:3306/my_app_db");
-        config.setUsername("root");
-        config.setPassword("password");
-        
-        // Optional: Recommended HikariCP settings
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
-        dataSource = new HikariDataSource(config);
-    }
-
-    @Override
-    public Connection getConnection(String database) throws SQLException {
-        // Note: The 'database' param is ignored here because it's defined in HikariConfig,
-        // but you could use it to switch pools if managing multiple databases.
-        return dataSource.getConnection();
-    }
-}
-```
-
 ### 2. Define a Model (Record)
 
 Create a class extending `DatabaseRecord`. Use annotations to map the class to a table and its fields to columns.
